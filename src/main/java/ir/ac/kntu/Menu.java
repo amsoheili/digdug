@@ -96,6 +96,7 @@ public class Menu {
         Button addNewPlayer = new Button("ADD NEW PLAYER");
         submit.setOnAction(e->{
             System.out.println("Hal");
+            GameLoop game = new GameLoop(root,scene,stage,result);
         });
         addNewPlayer.setOnAction(e->{
             addNewPlayer(listView);

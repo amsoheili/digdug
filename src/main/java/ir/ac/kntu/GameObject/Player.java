@@ -1,8 +1,6 @@
-package ir.ac.kntu;
+package ir.ac.kntu.GameObject;
 
-public class Player {
-    private int x;
-    private int y;
+public class Player extends GameObject{
     private int hp;
     private int currentScore;
     private int maxScore;
@@ -12,8 +10,7 @@ public class Player {
     }
 
     public Player(int x,int y,int hp,GunType gunType){
-        this.x = x;
-        this.y = y;
+        super(x,y);
         this.hp = hp;
         this.gunType = gunType;
         this.currentScore = 0;
