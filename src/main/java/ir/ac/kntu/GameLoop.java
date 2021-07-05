@@ -11,7 +11,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -81,7 +80,7 @@ public class GameLoop {
             @Override
             public void handle(long l) {
                 try{
-                   Thread.sleep(800);
+                   Thread.sleep(200);
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }
@@ -98,6 +97,9 @@ public class GameLoop {
             if (!gameObjects.get(i).isAlive()){
                 gameObjects.remove(i);
             }
+//            if (gameObjects.get(i) instanceof Bullet){
+//                gameObjects.remove(i);
+//            }
         }
     }
 
@@ -128,7 +130,7 @@ public class GameLoop {
             if(!gameObjects.get(i).isVisible()){
                 continue;
             }
-            root.add(gameObjects.get(i).getImage(),gameObjects.get(i).getY(),gameObjects.get(i).getX());
+            root.add(gameObjects.get(i).getImage(),gameObjects.get(i).getColumnIndex(),gameObjects.get(i).getRowIndex());
         }
     }
 

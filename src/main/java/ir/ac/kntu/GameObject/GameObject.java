@@ -5,8 +5,8 @@ import javafx.scene.image.ImageView;
 
 public class GameObject {
     private ImageView image;
-    private int x;
-    private int y;
+    private int rowIndex;
+    private int columnIndex;
     private int xSpeed;
     private int ySpeed;
     private boolean isAlive;
@@ -16,9 +16,9 @@ public class GameObject {
 
     }
 
-    public GameObject(int x,int y,int xSpeed,int ySpeed){
-        this.x = x;
-        this.y = y;
+    public GameObject(int rowIndex,int columnIndex,int xSpeed,int ySpeed){
+        this.rowIndex = rowIndex;
+        this.columnIndex = columnIndex;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
         isAlive = true;
@@ -26,7 +26,6 @@ public class GameObject {
     }
 
     public void collide(GameObject gameObject){
-
     }
 
     public void setImage(ImageView image){
@@ -45,20 +44,20 @@ public class GameObject {
         return isVisible;
     }
 
-    public int getX() {
-        return x;
+    public int getRowIndex() {
+        return rowIndex;
     }
 
-    public int getY() {
-        return y;
+    public int getColumnIndex() {
+        return columnIndex;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setColumnIndex(int columnIndex) {
+        this.columnIndex = columnIndex;
     }
 
     public int getXSpeed() {
@@ -78,12 +77,12 @@ public class GameObject {
     }
 
     public void move(){
-        setX(getX()+getXSpeed());
-        setY(getY()+getYSpeed());
+        setRowIndex(getRowIndex()+getXSpeed());
+        setColumnIndex(getColumnIndex()+getYSpeed());
     }
 
     public boolean isColliding(GameObject gameObject){
-        return (getX()==gameObject.getX())&&(getY()==gameObject.getY());
+        return (getRowIndex()==gameObject.getRowIndex())&&(getColumnIndex()==gameObject.getColumnIndex());
     }
 
     public void setVisible(boolean visible) {

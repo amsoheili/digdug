@@ -9,5 +9,11 @@ public class DestructibleRock extends GameObject{
         setImage(setImageHelper("Cropped_Images/Destructible_Rock.png"));
     }
 
+    @Override
+    public void collide(GameObject gameObject){
+        if (gameObject instanceof Player){
+            setAlive(false);
+        }
+    }
 
 }

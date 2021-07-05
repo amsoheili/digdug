@@ -133,43 +133,97 @@ public class Balloon extends GameObject{
                 setDirection(ObjectDirection.UP);
             }
         }
-        if (gameObject instanceof IndestructibleRock){
+        if (gameObject instanceof IndestructibleRock || gameObject instanceof Bullet){
             setBalloonState(BalloonState.EXPLODING);
             explode();
+        }
+        if (gameObject instanceof Player && (getBalloonState() != BalloonState.EXPLODING)){
+            gameObject.setAlive(false);
+            gameObject.setVisible(false);
         }
     }
 
     public void explode(){
-        if (type == BalloonType.ORDINARY && balloonState == BalloonState.EXPLODING){
-            Timeline timeline = new Timeline();
-            timeline.setCycleCount(3);
-            KeyFrame kf = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-                int step=1;
-                @Override
-                public void handle(ActionEvent event) {
-                    ImageView image1;
-                    if (step == 1){
-                        setImage(setImageHelper("Cropped_Images/Ordinary_Balloon2.png"));
-                        step++;
-                    }
-                    if (step == 2){
-                        setImage(setImageHelper("Cropped_Images/Ordinary_Balloon3.png"));
-                        step++;
-                    }
-                    if (step == 3){
-                        setAlive(false);
-                        setVisible(false);
-                    }
-                }
-            });
+        if (type == BalloonType.ORDINARY && balloonState == BalloonState.EXPLODING) {
+            explodeOrdinaryBalloon();
+        }else if (type == BalloonType.DRAGON && balloonState == BalloonState.EXPLODING){
+            explodeDragonBalloon();
         }
     }
 
+    public void explodeDragonBalloon(){
+        Runnable exploding = new Runnable() {
+            int step=1;
+            @Override
+            public void run() {
+                if (step == 1){
+                    setImage(setImageHelper("Cropped_Images/DragonBalloon1.png"));
+                    try{
+                        Thread.sleep(800);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    step++;
+                }
+                if (step == 2){
+                    setImage(setImageHelper("Cropped_Images/DragonBalloon2.png"));
+                    try{
+                        Thread.sleep(800);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    step++;
+                }
+                if (step == 3){
+                    setAlive(false);
+                    setVisible(false);
+                }
+            }
+        };
+        Thread thread = new Thread(exploding);
+        thread.start();
+    }
+
+    public void explodeOrdinaryBalloon(){
+        Runnable exploding = new Runnable() {
+            int step=1;
+            @Override
+            public void run() {
+                if (step == 1){
+                    setImage(setImageHelper("Cropped_Images/Ordinary_Balloon2.png"));
+                    try{
+                        Thread.sleep(800);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    step++;
+                }
+                if (step == 2){
+                    setImage(setImageHelper("Cropped_Images/Ordinary_Balloon3.png"));
+                    try{
+                        Thread.sleep(800);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    step++;
+                }
+                if (step == 3){
+                    setAlive(false);
+                    setVisible(false);
+                }
+            }
+        };
+        Thread thread = new Thread(exploding);
+        thread.start();
+    }
     @Override
     public void move(){
-        setX(getX()+getXSpeed());
-        setY(getY()+getYSpeed());
+        setRowIndex(getRowIndex()+getXSpeed());
+        setColumnIndex(getColumnIndex()+getYSpeed());
         setImage();
     }
 
+    public BalloonState getBalloonState() {
+        return balloonState;
+    }
 }

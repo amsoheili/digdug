@@ -16,6 +16,7 @@ public class Player extends GameObject implements KeyListener {
     private PlayerState playerState;
     private KeyEvent keyEvent;
     private PlayerInfo playerInfo;
+    private int bulletType;
 
     public Player(){
     }
@@ -97,32 +98,31 @@ public class Player extends GameObject implements KeyListener {
     public void notifyPlayer(KeyEvent keyEvent, List<GameObject> gameObjects) {
         switch (keyEvent.getCode()) {
             case UP:
-                if (getX() > 1) {
-                    setX(getX() - 1);
+                if (getRowIndex() > 1) {
+                    setRowIndex(getRowIndex() - 1);
                 }
                 this.direction = ObjectDirection.UP;
                 break;
             case DOWN:
-                if (getX() < MapData.GRID_SIZE_X) {
-                    setX(getX() + 1);
+                if (getRowIndex() < MapData.GRID_SIZE_X) {
+                    setRowIndex(getRowIndex() + 1);
                 }
                 this.direction = ObjectDirection.DOWN;
                 break;
             case RIGHT:
-                if (getY() < MapData.GRID_SIZE_X) {
-                    setY(getY() + 1);
+                if (getColumnIndex() < MapData.GRID_SIZE_X) {
+                    setColumnIndex(getColumnIndex() + 1);
                 }
                 this.direction = ObjectDirection.RIGHT;
                 break;
             case LEFT:
-                if (getY() > 1) {
-                    setY(getY() - 1);
+                if (getColumnIndex() > 1) {
+                    setColumnIndex(getColumnIndex() - 1);
                 }
                 this.direction = ObjectDirection.LEFT;
                 break;
             case ENTER:
-                Bullet bullet = setBullet();
-                gameObjects.add(bullet);
+                setBullet(gameObjects);
             default:
                 break;
         }
@@ -130,15 +130,42 @@ public class Player extends GameObject implements KeyListener {
         gameObjects.add(this);
     }
 
-    public Bullet setBullet(){
-        if (direction == ObjectDirection.RIGHT){
-            return new Bullet(getX()+1,getY(),ObjectDirection.RIGHT);
-        }else if (direction == ObjectDirection.LEFT){
-            return new Bullet(getX()-1,getY(),ObjectDirection.LEFT);
-        }else if (direction == ObjectDirection.UP){
-            return new Bullet(getX(),getY()-1,ObjectDirection.UP);
-        }else{
-            return new Bullet(getX(),getY()+1,ObjectDirection.DOWN);
+    public void setBullet(List<GameObject> gameObjects){
+        this.bulletType = 2;
+        if (direction == ObjectDirection.RIGHT && bulletType == 1){
+            gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()+1,ObjectDirection.RIGHT));
+        }else if (direction == ObjectDirection.LEFT && bulletType == 1){
+             gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()-1,ObjectDirection.LEFT));
+        }else if (direction == ObjectDirection.UP && bulletType == 1){
+             gameObjects.add(new Bullet(getRowIndex()-1, getColumnIndex(),ObjectDirection.UP));
+        }else if (direction == ObjectDirection.DOWN && bulletType == 1){
+             gameObjects.add(new Bullet(getRowIndex()+1, getColumnIndex(),ObjectDirection.DOWN));
+        }
+
+        if (direction == ObjectDirection.RIGHT && bulletType == 2){
+            gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()+1,ObjectDirection.RIGHT));
+            gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()+2,ObjectDirection.RIGHT));
+            gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()+3,ObjectDirection.RIGHT));
+            gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()+4,ObjectDirection.RIGHT));
+            gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()+5,ObjectDirection.RIGHT));
+        }else if (direction == ObjectDirection.LEFT && bulletType == 2){
+            gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()-1,ObjectDirection.LEFT));
+            gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()-2,ObjectDirection.LEFT));
+            gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()-3,ObjectDirection.LEFT));
+            gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()-4,ObjectDirection.LEFT));
+            gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()-5,ObjectDirection.LEFT));
+        }else if (direction == ObjectDirection.UP && bulletType == 2){
+            gameObjects.add(new Bullet(getRowIndex()-1, getColumnIndex(),ObjectDirection.UP));
+            gameObjects.add(new Bullet(getRowIndex()-2, getColumnIndex(),ObjectDirection.UP));
+            gameObjects.add(new Bullet(getRowIndex()-3, getColumnIndex(),ObjectDirection.UP));
+            gameObjects.add(new Bullet(getRowIndex()-4, getColumnIndex(),ObjectDirection.UP));
+            gameObjects.add(new Bullet(getRowIndex()-5, getColumnIndex(),ObjectDirection.UP));
+        }else if (direction == ObjectDirection.DOWN && bulletType == 2){
+            gameObjects.add(new Bullet(getRowIndex()+1, getColumnIndex(),ObjectDirection.DOWN));
+            gameObjects.add(new Bullet(getRowIndex()+2, getColumnIndex(),ObjectDirection.DOWN));
+            gameObjects.add(new Bullet(getRowIndex()+3, getColumnIndex(),ObjectDirection.DOWN));
+            gameObjects.add(new Bullet(getRowIndex()+4, getColumnIndex(),ObjectDirection.DOWN));
+            gameObjects.add(new Bullet(getRowIndex()+5, getColumnIndex(),ObjectDirection.DOWN));
         }
     }
 }

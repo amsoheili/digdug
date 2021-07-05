@@ -10,4 +10,11 @@ public class IndestructibleRock extends GameObject {
         setImage(setImageHelper("Cropped_Images/Indestructible_Rock.png"));
     }
 
+    @Override
+    public void collide(GameObject gameObject){
+        if (gameObject instanceof Player){
+            gameObject.setAlive(false);
+        }
+    }
+
 }
