@@ -8,14 +8,18 @@ import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-public class Balloon extends GameObject {
-    private BalloonType type; // 1-> Ordinary    2-> Dragon
+public class Balloon extends GameObject{
+    private BalloonType type;
     private ObjectDirection direction;
     private BalloonState balloonState;
 
-    public Balloon(int x,int y,BalloonType type){
-        super(x,y);
+    public Balloon(int x,int y,BalloonType type,ObjectDirection direction,BalloonState balloonState,
+                   int xSpeed,int ySpeed){
+        super(x,y,xSpeed,ySpeed);
         this.type = type;
+        this.direction = direction;
+        this.balloonState = balloonState;
+        setImage();
     }
 
     public void setImage(){
@@ -42,29 +46,6 @@ public class Balloon extends GameObject {
             image = setImageHelper("Cropped_Images/Ordinary_Balloon0.png");
             super.setImage(image);
         }
-//        if (type == BalloonType.ORDINARY && balloonState == BalloonState.EXPLODING){
-//            Timeline timeline = new Timeline();
-//            timeline.setCycleCount(3);
-//            KeyFrame kf = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-//                int step=1;
-//                @Override
-//                public void handle(ActionEvent event) {
-//                    ImageView image1;
-//                    if (step == 1){
-//                        image1 = setImageHelper("Cropped_Images/Ordinary_Balloon3.png");
-//                        super.se
-//                        step++;
-//                    }
-//                    if (step == 2){
-//                        image = new ImageView("Cropped_Images/Ordinary_Balloon3.png");
-//                        step++;
-//                    }
-//                    if (step == 3){
-//                        getChildren().clear();
-//                    }
-//                }
-//            });
-//        }
         if (type == BalloonType.DRAGON && direction == ObjectDirection.RIGHT &&
                 balloonState == BalloonState.MOVING){
             image = setImageHelper("Cropped_Images/DragonBalloon4.png");
@@ -73,13 +54,13 @@ public class Balloon extends GameObject {
         if (type == BalloonType.DRAGON && direction == ObjectDirection.UP &&
                 balloonState == BalloonState.MOVING){
             image = setImageHelper("Cropped_Images/DragonBalloon4.png");
-            image.setRotate(90);
+            image.setRotate(-90);
             super.setImage(image);
         }
         if (type == BalloonType.DRAGON && direction == ObjectDirection.DOWN &&
                 balloonState == BalloonState.MOVING){
             image = setImageHelper("Cropped_Images/DragonBalloon4.png");
-            image.setRotate(-90);
+            image.setRotate(90);
             super.setImage(image);
         }
 
@@ -134,6 +115,61 @@ public class Balloon extends GameObject {
 
     public void setBalloonState(BalloonState balloonState){
         this.balloonState = balloonState;
+    }
+
+    @Override
+    public void collide(GameObject gameObject){
+        if (gameObject instanceof DestructibleRock){
+            setXSpeed(-1*getXSpeed());
+            setYSpeed(-1*getYSpeed());
+            if (direction == ObjectDirection.RIGHT){
+                setDirection(ObjectDirection.LEFT);
+            }else if (direction == ObjectDirection.LEFT){
+                setDirection(ObjectDirection.RIGHT);
+            }
+            if (direction == ObjectDirection.UP){
+                setDirection(ObjectDirection.DOWN);
+            }else if (direction == ObjectDirection.DOWN){
+                setDirection(ObjectDirection.UP);
+            }
+        }
+        if (gameObject instanceof IndestructibleRock){
+            setBalloonState(BalloonState.EXPLODING);
+            explode();
+        }
+    }
+
+    public void explode(){
+        if (type == BalloonType.ORDINARY && balloonState == BalloonState.EXPLODING){
+            Timeline timeline = new Timeline();
+            timeline.setCycleCount(3);
+            KeyFrame kf = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                int step=1;
+                @Override
+                public void handle(ActionEvent event) {
+                    ImageView image1;
+                    if (step == 1){
+                        setImage(setImageHelper("Cropped_Images/Ordinary_Balloon2.png"));
+                        step++;
+                    }
+                    if (step == 2){
+                        setImage(setImageHelper("Cropped_Images/Ordinary_Balloon3.png"));
+                        step++;
+                    }
+                    if (step == 3){
+                        setAlive(false);
+                        setVisible(false);
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void move(){
+        setX(getX()+getXSpeed());
+        setY(getY()+getYSpeed());
+        setImage();
     }
 
 }

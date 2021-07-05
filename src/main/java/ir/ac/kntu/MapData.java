@@ -6,6 +6,7 @@ public class MapData {
     public static final int INDESTRUCTIBLE_ROCK = 2;
     public static final int ORDINARY_BALLOON_AREA = 3;
     public static final int DRAGON_BALLOON_AREA = 4;
+    public static final int PLAYER = 5;
     public static final int GRID_SCALE = 30;
     public static final int GRID_SIZE_X = 20;
     public static final int GRID_SIZE_Y = 20;

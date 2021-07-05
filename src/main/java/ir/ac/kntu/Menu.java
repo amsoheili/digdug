@@ -97,6 +97,7 @@ public class Menu {
         submit.setOnAction(e->{
             System.out.println("Hal");
             GameLoop game = new GameLoop(root,scene,stage,result);
+            game.startGame();
         });
         addNewPlayer.setOnAction(e->{
             addNewPlayer(listView);
