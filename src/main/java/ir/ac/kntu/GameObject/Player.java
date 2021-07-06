@@ -95,6 +95,7 @@ public class Player extends GameObject implements KeyListener {
         notifyPlayer(keyEvent,gameObjects);
         setImage();
     }
+
     public void setPlayerState(PlayerState playerState){
         this.playerState = playerState;
     }
@@ -120,6 +121,7 @@ public class Player extends GameObject implements KeyListener {
         gameObjects.remove(this);
         gameObjects.add(this);
     }
+
     public void notifyPlayer(KeyEvent keyEvent, List<GameObject> gameObjects) {
         setPlayerState(PlayerState.MOVING);
         switch (keyEvent.getCode()) {

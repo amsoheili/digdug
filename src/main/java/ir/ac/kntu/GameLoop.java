@@ -95,7 +95,7 @@ public class GameLoop {
 //                    return;
 //                }
                 try{
-                   Thread.sleep(200);
+                    Thread.sleep(200);
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }
@@ -129,7 +129,7 @@ public class GameLoop {
     }
 
     public void clean(){
-        for (int i=0 ;i< gameObjects.size();i++){
+        for (int i=0;i< gameObjects.size();i++){
             if (!gameObjects.get(i).isAlive()){
                 gameObjects.remove(i);
             }

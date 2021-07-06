@@ -23,7 +23,12 @@ public class Balloon extends GameObject{
     }
 
     public void setImage(){
-        ImageView image;
+        ImageView image = new ImageView();
+        setImageOrdinaryBalloon(image);
+        setImageDragonBalloon(image);
+    }
+
+    public void setImageOrdinaryBalloon(ImageView image){
         if (type == BalloonType.ORDINARY && (direction == ObjectDirection.UP) &&
                 balloonState == BalloonState.MOVING){
             image = setImageHelper("Cropped_Images/Ordinary_Balloon1.png");
@@ -46,6 +51,9 @@ public class Balloon extends GameObject{
             image = setImageHelper("Cropped_Images/Ordinary_Balloon0.png");
             super.setImage(image);
         }
+    }
+
+    public void setImageDragonBalloon(ImageView image){
         if (type == BalloonType.DRAGON && direction == ObjectDirection.RIGHT &&
                 balloonState == BalloonState.MOVING){
             image = setImageHelper("Cropped_Images/DragonBalloon4.png");
@@ -63,7 +71,6 @@ public class Balloon extends GameObject{
             image.setRotate(90);
             super.setImage(image);
         }
-
         if (type == BalloonType.DRAGON && direction == ObjectDirection.LEFT &&
                 balloonState == BalloonState.MOVING){
             image = setImageHelper("Cropped_Images/DragonBalloon3.png");
@@ -95,7 +102,6 @@ public class Balloon extends GameObject{
             image.setFitWidth(2*MapData.GRID_SCALE);
             super.setImage(image);
         }
-
     }
 
     public ImageView setImageHelper(String path){
@@ -153,6 +159,8 @@ public class Balloon extends GameObject{
 
     public void explode(){
         if (type == BalloonType.ORDINARY && balloonState == BalloonState.EXPLODING) {
+            setXSpeed(0);
+            setYSpeed(0);
             explodeOrdinaryBalloon();
         }else if (type == BalloonType.DRAGON && balloonState == BalloonState.EXPLODING){
             explodeDragonBalloon();
@@ -163,43 +171,27 @@ public class Balloon extends GameObject{
         setXSpeed(0);
         setYSpeed(0);
         Runnable exploding = new Runnable() {
-            int step=1;
+            private int step=1;
             @Override
             public void run() {
                 if (step == 1){
                     setImage(setImageHelper("Cropped_Images/DragonBalloon0.png"));
-                    try{
-                        Thread.sleep(800);
-                    }catch (InterruptedException e){
-                        e.printStackTrace();
-                    }
+                    threadSleeper(Thread.currentThread());
                     step++;
                 }
                 if (step == 2){
                     setImage(setImageHelper("Cropped_Images/DragonBalloon1.png"));
-                    try{
-                        Thread.sleep(800);
-                    }catch (InterruptedException e){
-                        e.printStackTrace();
-                    }
+                    threadSleeper(Thread.currentThread());
                     step++;
                 }
                 if (step == 3){
                     setImage(setImageHelper("Cropped_Images/DragonBalloon7.png"));
-                    try{
-                        Thread.sleep(800);
-                    }catch (InterruptedException e){
-                        e.printStackTrace();
-                    }
+                    threadSleeper(Thread.currentThread());
                     step++;
                 }
                 if (step == 4){
                     setImage(setImageHelper("Cropped_Images/DragonBalloon2.png"));
-                    try{
-                        Thread.sleep(800);
-                    }catch (InterruptedException e){
-                        e.printStackTrace();
-                    }
+                    threadSleeper(Thread.currentThread());
                     step++;
                 }
                 if (step == 5){
@@ -212,11 +204,17 @@ public class Balloon extends GameObject{
         thread.start();
     }
 
+    public void threadSleeper(Thread thread){
+        try{
+            Thread.sleep(800);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
     public void explodeOrdinaryBalloon(){
-        setXSpeed(0);
-        setYSpeed(0);
         Runnable exploding = new Runnable() {
-            int step=1;
+            private int step=1;
             @Override
             public void run() {
                 if (step == 1){
@@ -264,6 +262,7 @@ public class Balloon extends GameObject{
         Thread thread = new Thread(exploding);
         thread.start();
     }
+
     @Override
     public void move(){
         setRowIndex(getRowIndex()+getXSpeed());
