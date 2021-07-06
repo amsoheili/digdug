@@ -157,7 +157,7 @@ public class Balloon extends GameObject{
             @Override
             public void run() {
                 if (step == 1){
-                    setImage(setImageHelper("Cropped_Images/DragonBalloon1.png"));
+                    setImage(setImageHelper("Cropped_Images/DragonBalloon0.png"));
                     try{
                         Thread.sleep(800);
                     }catch (InterruptedException e){
@@ -166,7 +166,7 @@ public class Balloon extends GameObject{
                     step++;
                 }
                 if (step == 2){
-                    setImage(setImageHelper("Cropped_Images/DragonBalloon2.png"));
+                    setImage(setImageHelper("Cropped_Images/DragonBalloon1.png"));
                     try{
                         Thread.sleep(800);
                     }catch (InterruptedException e){
@@ -175,6 +175,24 @@ public class Balloon extends GameObject{
                     step++;
                 }
                 if (step == 3){
+                    setImage(setImageHelper("Cropped_Images/DragonBalloon7.png"));
+                    try{
+                        Thread.sleep(800);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    step++;
+                }
+                if (step == 4){
+                    setImage(setImageHelper("Cropped_Images/DragonBalloon2.png"));
+                    try{
+                        Thread.sleep(800);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    step++;
+                }
+                if (step == 5){
                     setAlive(false);
                     setVisible(false);
                 }
@@ -190,7 +208,7 @@ public class Balloon extends GameObject{
             @Override
             public void run() {
                 if (step == 1){
-                    setImage(setImageHelper("Cropped_Images/Ordinary_Balloon2.png"));
+                    setImage(setImageHelper("Cropped_Images/Ordinary_Balloon4.png"));
                     try{
                         Thread.sleep(800);
                     }catch (InterruptedException e){
@@ -199,7 +217,7 @@ public class Balloon extends GameObject{
                     step++;
                 }
                 if (step == 2){
-                    setImage(setImageHelper("Cropped_Images/Ordinary_Balloon3.png"));
+                    setImage(setImageHelper("Cropped_Images/Ordinary_Balloon5.png"));
                     try{
                         Thread.sleep(800);
                     }catch (InterruptedException e){
@@ -208,6 +226,24 @@ public class Balloon extends GameObject{
                     step++;
                 }
                 if (step == 3){
+                    setImage(setImageHelper("Cropped_Images/Ordinary_Balloon2.png"));
+                    try{
+                        Thread.sleep(800);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    step++;
+                }
+                if (step == 4){
+                    setImage(setImageHelper("Cropped_Images/Ordinary_Balloon3.png"));
+                    try{
+                        Thread.sleep(800);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    step++;
+                }
+                if (step == 5){
                     setAlive(false);
                     setVisible(false);
                 }

@@ -6,6 +6,7 @@ import ir.ac.kntu.KeyBoard.KeyLogger;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -77,14 +78,29 @@ public class GameLoop {
 
     public void setTimerAnimation(){
         animationTimer = new AnimationTimer() {
+            private int count=0;
             @Override
             public void handle(long l) {
+//                if(count<5){
+//                    root.getChildren().clear();
+//                    count++;
+//                    TextField textField=new TextField((String.valueOf(count)));
+//                    textField.setId("textField");
+//                    root.add(textField,0,0);
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    return;
+//                }
                 try{
                    Thread.sleep(200);
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }
                 checkCollide();
+                checkAndFall();
                 clean();
                 moveBalloons();
                 addGameObjectsToRoot();
@@ -92,14 +108,31 @@ public class GameLoop {
         };
     }
 
+    public void checkAndFall(){
+        for (int i=0;i< gameObjects.size();i++){
+            if (gameObjects.get(i) instanceof IndestructibleRock && isEmptyBeneath(gameObjects.get(i))){
+                ((IndestructibleRock)(gameObjects.get(i))).fall();
+            }
+        }
+    }
+
+    public boolean isEmptyBeneath(GameObject gameObject){
+        for (int i=0;i< gameObjects.size();i++){
+            if (gameObjects.get(i) instanceof DestructibleRock){
+                if ((gameObjects.get(i).getRowIndex() == gameObject.getRowIndex()+1)
+                        && (gameObjects.get(i).getColumnIndex() == gameObject.getColumnIndex())){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public void clean(){
         for (int i=0 ;i< gameObjects.size();i++){
             if (!gameObjects.get(i).isAlive()){
                 gameObjects.remove(i);
             }
-//            if (gameObjects.get(i) instanceof Bullet){
-//                gameObjects.remove(i);
-//            }
         }
     }
 

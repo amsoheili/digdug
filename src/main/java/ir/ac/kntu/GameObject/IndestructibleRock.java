@@ -17,4 +17,8 @@ public class IndestructibleRock extends GameObject {
         }
     }
 
+    public void fall(){
+        setRowIndex(getRowIndex()+1);
+    }
+
 }
