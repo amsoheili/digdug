@@ -133,7 +133,15 @@ public class Balloon extends GameObject{
                 setDirection(ObjectDirection.UP);
             }
         }
-        if (gameObject instanceof IndestructibleRock || gameObject instanceof Bullet){
+        if (gameObject instanceof IndestructibleRock){
+            if (  ((IndestructibleRock)gameObject).getLastRowIndex() + 1 == getRowIndex()){
+                System.out.println("A");
+                setBalloonState(BalloonState.EXPLODING);
+                explode();
+            }
+        }
+
+        if (gameObject instanceof Bullet){
             setBalloonState(BalloonState.EXPLODING);
             explode();
         }
@@ -152,6 +160,8 @@ public class Balloon extends GameObject{
     }
 
     public void explodeDragonBalloon(){
+        setXSpeed(0);
+        setYSpeed(0);
         Runnable exploding = new Runnable() {
             int step=1;
             @Override
@@ -203,6 +213,8 @@ public class Balloon extends GameObject{
     }
 
     public void explodeOrdinaryBalloon(){
+        setXSpeed(0);
+        setYSpeed(0);
         Runnable exploding = new Runnable() {
             int step=1;
             @Override

@@ -4,6 +4,7 @@ import ir.ac.kntu.GameLoop;
 import javafx.scene.image.ImageView;
 
 public class IndestructibleRock extends GameObject {
+    private int lastRowIndex;
 
     public IndestructibleRock(int x,int y){
         super(x,y,0,0);
@@ -18,7 +19,35 @@ public class IndestructibleRock extends GameObject {
     }
 
     public void fall(){
+        //setLastRowIndex();
+        setLastRowIndex(getRowIndex());
         setRowIndex(getRowIndex()+1);
     }
 
+    public int getLastRowIndex() {
+        return lastRowIndex;
+    }
+
+    public void setLastRowIndex(int lastRowIndex){
+        this.lastRowIndex = lastRowIndex;
+    }
+
+    public void setLastRowIndex(){
+        Runnable lastIndexSetter = new Runnable() {
+            @Override
+            public void run() {
+                setLastRowIndex(getRowIndex());
+                //System.out.println(getRowIndex());
+                try{
+                    Thread.sleep(400);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                //System.out.println("B");
+                //setLastRowIndex(-1);
+            }
+        };
+        Thread thread = new Thread(lastIndexSetter);
+        thread.start();
+    }
 }
