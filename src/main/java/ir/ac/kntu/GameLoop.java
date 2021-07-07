@@ -6,6 +6,7 @@ import ir.ac.kntu.KeyBoard.KeyLogger;
 import ir.ac.kntu.Map.MapBuilder;
 import ir.ac.kntu.Map.MapData;
 import javafx.animation.AnimationTimer;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -14,10 +15,10 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class GameLoop {
     private GridPane root;
@@ -27,6 +28,7 @@ public class GameLoop {
     private AnimationTimer animationTimer;
     private List<GameObject> gameObjects;
     private KeyLogger keyLogger;
+    private long startTime;
 
     public GameLoop(GridPane root,Scene scene,Stage stage,ArrayList<PlayerInfo> result){
         this.root = root;
@@ -140,8 +142,16 @@ public class GameLoop {
     }
 
     public void moveBalloons(){
+        Random rd = new Random();
         for (int i=0;i<gameObjects.size();i++){
             gameObjects.get(i).move();
+            if (gameObjects.get(i) instanceof Balloon){
+                if (((Balloon)gameObjects.get(i)).getType() == BalloonType.DRAGON){
+                    if (rd.nextBoolean()){
+                        ((Balloon)gameObjects.get(i)).fire(gameObjects);
+                    }
+                }
+            }
         }
     }
 
@@ -158,6 +168,14 @@ public class GameLoop {
 
     public void addGameObjectsToRoot(){
         root.getChildren().clear();
+//        Text text=new Text();
+//        int time = (gameTime/1000-deltaTime);
+//        int minute=time/60;
+//        int seconds=time%60;
+//        text.setText("TIME    "+minute+":"+seconds);
+//        text.getStyleClass().add("text");
+//        text.setId("text");
+//        root.add(text,0,0,5,1);
         //System.out.println("A");
         for (int i=0;i< gameObjects.size();i++){
             if (gameObjects.get(i) instanceof KeyListener){
@@ -178,5 +196,13 @@ public class GameLoop {
 
     public void startGame(){
         animationTimer.start();
+        startTime=new Date().getTime();
+        //setTimer();
+    }
+
+    public void setTimer(){
+        Timeline timeline = new Timeline();
+
+        //Thread timeThread = new Thread(timerTask);
     }
 }

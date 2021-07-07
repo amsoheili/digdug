@@ -3,6 +3,8 @@ package ir.ac.kntu.GameObject;
 import ir.ac.kntu.Map.MapData;
 import javafx.scene.image.ImageView;
 
+import java.util.List;
+
 public class Balloon extends GameObject{
     private BalloonType type;
     private ObjectDirection direction;
@@ -71,32 +73,40 @@ public class Balloon extends GameObject{
             image = setImageHelper("Cropped_Images/DragonBalloon3.png");
             super.setImage(image);
         }
-        if (type == BalloonType.DRAGON && direction == ObjectDirection.RIGHT &&
-                balloonState == BalloonState.FIRING){
-            image = setImageHelper("Cropped_Images/DragonBalloon6.png");
-            image.setFitWidth(2*MapData.GRID_SCALE);
-            super.setImage(image);
-        }
-        if (type == BalloonType.DRAGON && direction == ObjectDirection.UP &&
-                balloonState == BalloonState.FIRING){
-            image = setImageHelper("Cropped_Images/DragonBalloon6.png");
-            image.setFitHeight(2*MapData.GRID_SCALE);
-            image.setRotate(90);
-            super.setImage(image);
-        }
-        if (type == BalloonType.DRAGON && direction == ObjectDirection.DOWN &&
-                balloonState == BalloonState.FIRING){
-            image = setImageHelper("Cropped_Images/DragonBalloon5.png");
-            image.setFitHeight(2*MapData.GRID_SCALE);
-            image.setRotate(-90);
-            super.setImage(image);
-        }
-        if (type == BalloonType.DRAGON && direction == ObjectDirection.LEFT &&
-                balloonState == BalloonState.FIRING){
-            image = setImageHelper("Cropped_Images/DragonBalloon5.png");
-            image.setFitWidth(2*MapData.GRID_SCALE);
-            super.setImage(image);
-        }
+//        if (type == BalloonType.DRAGON && direction == ObjectDirection.RIGHT &&
+//                balloonState == BalloonState.FIRING){
+//            image = setImageHelper("Cropped_Images/DragonBalloon6.png");
+//            image.setFitWidth(2*MapData.GRID_SCALE);
+//            super.setImage(image);
+//        }
+//        if (type == BalloonType.DRAGON && direction == ObjectDirection.UP &&
+//                balloonState == BalloonState.FIRING){
+//            image = setImageHelper("Cropped_Images/DragonBalloon6.png");
+//            image.setFitHeight(2*MapData.GRID_SCALE);
+//            image.setRotate(90);
+//            super.setImage(image);
+//        }
+//        if (type == BalloonType.DRAGON && direction == ObjectDirection.DOWN &&
+//                balloonState == BalloonState.FIRING){
+//            image = setImageHelper("Cropped_Images/DragonBalloon5.png");
+//            image.setFitHeight(2*MapData.GRID_SCALE);
+//            image.setRotate(-90);
+//            super.setImage(image);
+//        }
+//        if (type == BalloonType.DRAGON && direction == ObjectDirection.LEFT &&
+//                balloonState == BalloonState.FIRING){
+//            image = setImageHelper("Cropped_Images/DragonBalloon5.png");
+//            image.setFitWidth(2*MapData.GRID_SCALE);
+//            super.setImage(image);
+//        }
+    }
+
+    public BalloonType getType(){
+        return type;
+    }
+
+    public ObjectDirection getDirection(){
+        return direction;
     }
 
     public ImageView setImageHelper(String path){
@@ -263,5 +273,20 @@ public class Balloon extends GameObject{
 
     public BalloonState getBalloonState() {
         return balloonState;
+    }
+
+    public void fire(List<GameObject> gameObjects){
+        if (getDirection() == ObjectDirection.RIGHT){
+            gameObjects.add(new Flame(getRowIndex(),getColumnIndex()+1,ObjectDirection.RIGHT));
+        }
+        if (getDirection() == ObjectDirection.LEFT){
+            gameObjects.add(new Flame(getRowIndex(),getColumnIndex()-1,ObjectDirection.LEFT));
+        }
+        if (getDirection() == ObjectDirection.UP){
+            gameObjects.add(new Flame(getRowIndex()-1,getColumnIndex(),ObjectDirection.UP));
+        }
+        if (getDirection() == ObjectDirection.DOWN){
+            gameObjects.add(new Flame(getRowIndex()+1,getColumnIndex(),ObjectDirection.DOWN));
+        }
     }
 }

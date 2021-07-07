@@ -230,11 +230,18 @@ public class Player extends GameObject implements KeyListener {
             }
         }
         if (gameObject instanceof Balloon && (((Balloon)gameObject).getBalloonState() != BalloonState.EXPLODING) ){
-            if (getHp() == 0){
-                setAlive(false);
-            }else{
-                setHp(getHp()-1);
-            }
+            getsDamageOrDie();
+        }
+        if (gameObject instanceof Flame){
+            getsDamageOrDie();
+        }
+    }
+
+    public void getsDamageOrDie(){
+        if (getHp() == 0){
+            setAlive(false);
+        }else{
+            setHp(getHp()-1);
         }
     }
 
