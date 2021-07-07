@@ -1,7 +1,5 @@
-package ir.ac.kntu;
+package ir.ac.kntu.Map;
 
-import ir.ac.kntu.GameObject.Balloon;
-import ir.ac.kntu.GameObject.BalloonType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

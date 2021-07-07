@@ -1,9 +1,12 @@
-package ir.ac.kntu;
+package ir.ac.kntu.PlayerDAO;
+
+import ir.ac.kntu.PlayerDAO.PlayerDAO;
+import ir.ac.kntu.PlayerInfo;
 
 import java.io.*;
 import java.util.ArrayList;
 
-public class BinaryPlayerDAO implements PlayerDAO{
+public class BinaryPlayerDAO implements PlayerDAO {
     @Override
     public ArrayList<PlayerInfo> getAllPlayers() {
         ArrayList<PlayerInfo> playersInfo = new ArrayList<>();

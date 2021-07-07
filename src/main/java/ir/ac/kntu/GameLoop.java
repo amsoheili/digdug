@@ -3,10 +3,12 @@ package ir.ac.kntu;
 import ir.ac.kntu.GameObject.*;
 import ir.ac.kntu.KeyBoard.KeyListener;
 import ir.ac.kntu.KeyBoard.KeyLogger;
+import ir.ac.kntu.Map.MapBuilder;
+import ir.ac.kntu.Map.MapData;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -49,6 +51,7 @@ public class GameLoop {
             for (int j=0;j<mapData[i].length;j++){
                 if (mapData[i][j] == MapData.PLAYER){
                     gameObjects.add(new Player(i,j,3,ObjectDirection.RIGHT,PlayerState.STANDING,1,1));
+
                 }
                 if (mapData[i][j] == MapData.DESTRUCTIBLE_ROCK){
                     gameObjects.add(new DestructibleRock(i,j));
@@ -162,6 +165,12 @@ public class GameLoop {
             }
             if(!gameObjects.get(i).isVisible()){
                 continue;
+            }
+            if (gameObjects.get(i) instanceof Player){
+                for (int j=1;j<=((Player)gameObjects.get(i)).getHp();j++){
+                    Flower flower = new Flower(0,MapData.GRID_SIZE_X-j);
+                    root.add(flower.getImage(), flower.getColumnIndex(),flower.getRowIndex());
+                }
             }
             root.add(gameObjects.get(i).getImage(),gameObjects.get(i).getColumnIndex(),gameObjects.get(i).getRowIndex());
         }

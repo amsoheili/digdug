@@ -1,12 +1,7 @@
 package ir.ac.kntu.GameObject;
 
-import ir.ac.kntu.MapData;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import ir.ac.kntu.Map.MapData;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 
 public class Balloon extends GameObject{
     private BalloonType type;
@@ -150,10 +145,6 @@ public class Balloon extends GameObject{
         if (gameObject instanceof Bullet){
             setBalloonState(BalloonState.EXPLODING);
             explode();
-        }
-        if (gameObject instanceof Player && (getBalloonState() != BalloonState.EXPLODING)){
-            gameObject.setAlive(false);
-            gameObject.setVisible(false);
         }
     }
 

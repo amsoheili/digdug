@@ -1,4 +1,4 @@
-package ir.ac.kntu;
+package ir.ac.kntu.Map;
 
 public class MapData {
     public static final int EMPTY = 0;

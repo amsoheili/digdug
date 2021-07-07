@@ -1,5 +1,7 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.PlayerDAO.BinaryPlayerDAO;
+import ir.ac.kntu.PlayerDAO.PlayerDAO;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,7 +19,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Menu {
     private PlayerDAO playerDAO;

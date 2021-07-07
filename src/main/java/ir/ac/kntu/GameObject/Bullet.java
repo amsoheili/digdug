@@ -1,9 +1,6 @@
 package ir.ac.kntu.GameObject;
 
-import ir.ac.kntu.MapData;
 import javafx.scene.image.ImageView;
-
-import java.io.IOException;
 
 public class Bullet extends GameObject{
     private ObjectDirection direction;

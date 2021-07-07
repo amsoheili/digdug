@@ -1,7 +1,7 @@
 package ir.ac.kntu.GameObject;
 
 import ir.ac.kntu.KeyBoard.KeyListener;
-import ir.ac.kntu.MapData;
+import ir.ac.kntu.Map.MapData;
 import ir.ac.kntu.PlayerInfo;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -17,6 +17,8 @@ public class Player extends GameObject implements KeyListener {
     private KeyEvent keyEvent;
     private PlayerInfo playerInfo;
     private int bulletType;
+    private int lastRowIndex;
+    private int lastColumnIndex;
 
     public Player(){
     }
@@ -92,6 +94,8 @@ public class Player extends GameObject implements KeyListener {
             setImage();
             return;
         }
+        this.lastColumnIndex = getColumnIndex();
+        this.lastRowIndex = getRowIndex();
         notifyPlayer(keyEvent,gameObjects);
         setImage();
     }
@@ -211,5 +215,67 @@ public class Player extends GameObject implements KeyListener {
                 }
             }
         }
+    }
+
+    @Override
+    public void collide(GameObject gameObject){
+        if (gameObject instanceof IndestructibleRock){
+            if (((IndestructibleRock)gameObject).getLastRowIndex() == getRowIndex()-1 &&
+                    (((gameObject).getColumnIndex() == getLastColumnIndex()+1) ||
+                    ((gameObject).getColumnIndex() == getLastColumnIndex()-1)) ){
+                System.out.println("You died");
+                setAlive(false);
+            }else {
+                goBack();
+            }
+        }
+        if (gameObject instanceof Balloon && (((Balloon)gameObject).getBalloonState() != BalloonState.EXPLODING) ){
+            if (getHp() == 0){
+                setAlive(false);
+            }else{
+                setHp(getHp()-1);
+            }
+        }
+    }
+
+    public void setHp(int hp){
+        this.hp = hp;
+    }
+
+    public void goBack(){
+        setRowIndex(getLastRowIndex());
+        setColumnIndex(getLastColumnIndex());
+    }
+
+//    @Override
+//    public void setRowIndex(int rowIndex){
+//        setLastRowIndex(getRowIndex());
+//        super.setRowIndex(rowIndex);
+//    }
+//
+//    @Override
+//    public void setColumnIndex(int columnIndex){
+//        setLastColumnIndex(getColumnIndex());
+//        super.setRowIndex(columnIndex);
+//    }
+
+    public int getLastRowIndex() {
+        return lastRowIndex;
+    }
+
+    public int getLastColumnIndex() {
+        return lastColumnIndex;
+    }
+
+    public void setLastColumnIndex(int lastColumnIndex) {
+        this.lastColumnIndex = lastColumnIndex;
+    }
+
+    public void setLastRowIndex(int lastRowIndex) {
+        this.lastRowIndex = lastRowIndex;
+    }
+
+    public int getHp(){
+        return this.hp;
     }
 }

@@ -4,7 +4,7 @@ import ir.ac.kntu.GameLoop;
 import javafx.scene.image.ImageView;
 
 public class IndestructibleRock extends GameObject {
-    private int lastRowIndex;
+    private int lastRowIndex =-1;
 
     public IndestructibleRock(int x,int y){
         super(x,y,0,0);
@@ -13,9 +13,9 @@ public class IndestructibleRock extends GameObject {
 
     @Override
     public void collide(GameObject gameObject){
-        if (gameObject instanceof Player){
-            gameObject.setAlive(false);
-        }
+//        if (gameObject instanceof Player){
+//            gameObject.setAlive(false);
+//        }
     }
 
     public void fall(){

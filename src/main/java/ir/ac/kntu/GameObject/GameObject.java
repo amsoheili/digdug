@@ -1,6 +1,6 @@
 package ir.ac.kntu.GameObject;
 
-import ir.ac.kntu.MapData;
+import ir.ac.kntu.Map.MapData;
 import javafx.scene.image.ImageView;
 
 public class GameObject {
