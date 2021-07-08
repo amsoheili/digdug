@@ -254,18 +254,6 @@ public class Player extends GameObject implements KeyListener {
         setColumnIndex(getLastColumnIndex());
     }
 
-//    @Override
-//    public void setRowIndex(int rowIndex){
-//        setLastRowIndex(getRowIndex());
-//        super.setRowIndex(rowIndex);
-//    }
-//
-//    @Override
-//    public void setColumnIndex(int columnIndex){
-//        setLastColumnIndex(getColumnIndex());
-//        super.setRowIndex(columnIndex);
-//    }
-
     public int getLastRowIndex() {
         return lastRowIndex;
     }

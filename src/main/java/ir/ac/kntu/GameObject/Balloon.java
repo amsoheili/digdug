@@ -73,32 +73,6 @@ public class Balloon extends GameObject{
             image = setImageHelper("Cropped_Images/DragonBalloon3.png");
             super.setImage(image);
         }
-//        if (type == BalloonType.DRAGON && direction == ObjectDirection.RIGHT &&
-//                balloonState == BalloonState.FIRING){
-//            image = setImageHelper("Cropped_Images/DragonBalloon6.png");
-//            image.setFitWidth(2*MapData.GRID_SCALE);
-//            super.setImage(image);
-//        }
-//        if (type == BalloonType.DRAGON && direction == ObjectDirection.UP &&
-//                balloonState == BalloonState.FIRING){
-//            image = setImageHelper("Cropped_Images/DragonBalloon6.png");
-//            image.setFitHeight(2*MapData.GRID_SCALE);
-//            image.setRotate(90);
-//            super.setImage(image);
-//        }
-//        if (type == BalloonType.DRAGON && direction == ObjectDirection.DOWN &&
-//                balloonState == BalloonState.FIRING){
-//            image = setImageHelper("Cropped_Images/DragonBalloon5.png");
-//            image.setFitHeight(2*MapData.GRID_SCALE);
-//            image.setRotate(-90);
-//            super.setImage(image);
-//        }
-//        if (type == BalloonType.DRAGON && direction == ObjectDirection.LEFT &&
-//                balloonState == BalloonState.FIRING){
-//            image = setImageHelper("Cropped_Images/DragonBalloon5.png");
-//            image.setFitWidth(2*MapData.GRID_SCALE);
-//            super.setImage(image);
-//        }
     }
 
     public BalloonType getType(){

@@ -1,6 +1,7 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.GameObject.*;
+import ir.ac.kntu.GameObject.Timer;
 import ir.ac.kntu.KeyBoard.KeyListener;
 import ir.ac.kntu.KeyBoard.KeyLogger;
 import ir.ac.kntu.Map.MapBuilder;
@@ -8,7 +9,9 @@ import ir.ac.kntu.Map.MapData;
 import javafx.animation.AnimationTimer;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -19,6 +22,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class GameLoop {
     private GridPane root;
@@ -29,6 +35,7 @@ public class GameLoop {
     private List<GameObject> gameObjects;
     private KeyLogger keyLogger;
     private long startTime;
+    private Timer timer;
 
     public GameLoop(GridPane root,Scene scene,Stage stage,ArrayList<PlayerInfo> result){
         this.root = root;
@@ -45,6 +52,7 @@ public class GameLoop {
     public void initBackground(){
         Background background = new Background(new BackgroundFill(Color.rgb(48,100,144), CornerRadii.EMPTY, Insets.EMPTY));
         root.setBackground(background);
+        root.setAlignment(Pos.CENTER_LEFT);
     }
 
     public void initGameObjects(){
@@ -53,7 +61,6 @@ public class GameLoop {
             for (int j=0;j<mapData[i].length;j++){
                 if (mapData[i][j] == MapData.PLAYER){
                     gameObjects.add(new Player(i,j,3,ObjectDirection.RIGHT,PlayerState.STANDING,1,1));
-
                 }
                 if (mapData[i][j] == MapData.DESTRUCTIBLE_ROCK){
                     gameObjects.add(new DestructibleRock(i,j));
@@ -168,15 +175,11 @@ public class GameLoop {
 
     public void addGameObjectsToRoot(){
         root.getChildren().clear();
-//        Text text=new Text();
-//        int time = (gameTime/1000-deltaTime);
-//        int minute=time/60;
-//        int seconds=time%60;
-//        text.setText("TIME    "+minute+":"+seconds);
-//        text.getStyleClass().add("text");
-//        text.setId("text");
-//        root.add(text,0,0,5,1);
-        //System.out.println("A");
+        Label label = new Label(getTimer().toString());
+        label.setMinWidth(150);
+        label.setStyle("-fx-font-size:12;");
+        label.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY,Insets.EMPTY)));
+        root.add(label,MapData.GRID_SIZE_X+1,1);
         for (int i=0;i< gameObjects.size();i++){
             if (gameObjects.get(i) instanceof KeyListener){
                 keyLogger.addListener((KeyListener)gameObjects.get(i));
@@ -197,12 +200,36 @@ public class GameLoop {
     public void startGame(){
         animationTimer.start();
         startTime=new Date().getTime();
-        //setTimer();
+        setTimer();
     }
 
     public void setTimer(){
-        Timeline timeline = new Timeline();
-
-        //Thread timeThread = new Thread(timerTask);
+        ScheduledExecutorService timerThread = Executors.newScheduledThreadPool(1);
+        this.timer = new Timer();
+        timerThread.scheduleAtFixedRate(timer,1,1, TimeUnit.SECONDS);
+//        timerThread.shutdown();
     }
+
+    public Timer getTimer(){
+        return timer;
+    }
+
+    private void startTimer() {
+        Thread timer;
+        timer = new Thread(() -> {
+            try {
+                Thread.sleep(1000 * 60 * 3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+//            if (!this.isDone()) {
+//                Platform.runLater(() -> {
+//                    getPane().addRow(getPane().getRowCount() - 1, new Text("TimeUp"));
+//                });
+//                handleEndOfGame();
+//            }
+        });
+        timer.start();
+    }
+
 }
