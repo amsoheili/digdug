@@ -36,6 +36,9 @@ public class GameLoop {
     private KeyLogger keyLogger;
     private long startTime;
     private Timer timer;
+    private ScheduledExecutorService timerThread;
+    private int numOfPlayers;
+    private int numOfEnemies;
 
     public GameLoop(GridPane root,Scene scene,Stage stage,ArrayList<PlayerInfo> result){
         this.root = root;
@@ -47,6 +50,18 @@ public class GameLoop {
         initBackground();
         initGameObjects();
         setTimerAnimation();
+        setNumOfPlayersAndEnemies();
+    }
+
+    public void setNumOfPlayersAndEnemies(){
+        for (int i=0;i< gameObjects.size();i++){
+            if (gameObjects.get(i) instanceof Balloon){
+                numOfEnemies++;
+            }
+            if (gameObjects.get(i) instanceof Player){
+                numOfPlayers++;
+            }
+        }
     }
 
     public void initBackground(){
@@ -143,6 +158,18 @@ public class GameLoop {
     public void clean(){
         for (int i=0;i< gameObjects.size();i++){
             if (!gameObjects.get(i).isAlive()){
+                if (gameObjects.get(i) instanceof Player){
+                    numOfPlayers--;
+                    if (getNumOfPlayers() == 0){
+                        endGame();
+                    }
+                }
+                if (gameObjects.get(i) instanceof Balloon){
+                    numOfEnemies--;
+                    if (numOfEnemies == 0){
+                        endGame();
+                    }
+                }
                 gameObjects.remove(i);
             }
         }
@@ -203,8 +230,13 @@ public class GameLoop {
         setTimer();
     }
 
+    public void endGame(){
+        animationTimer.stop();
+        timerThread.shutdown();
+    }
+
     public void setTimer(){
-        ScheduledExecutorService timerThread = Executors.newScheduledThreadPool(1);
+        timerThread = Executors.newScheduledThreadPool(1);
         this.timer = new Timer();
         timerThread.scheduleAtFixedRate(timer,1,1, TimeUnit.SECONDS);
 //        timerThread.shutdown();
@@ -232,4 +264,11 @@ public class GameLoop {
         timer.start();
     }
 
+    public void setNumOfPlayers(int numOfPlayers){
+        this.numOfPlayers = numOfPlayers;
+    }
+
+    public int getNumOfPlayers(){
+        return numOfPlayers;
+    }
 }
