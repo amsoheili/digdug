@@ -45,8 +45,10 @@ public class PlayerInfo implements Serializable,Comparable<PlayerInfo> {
                 "HighScore : " + highScore;
     }
 
+
     @Override
     public int compareTo(@NotNull PlayerInfo o) {
-        return 0;
+        return lastScore-o.lastScore;
     }
+
 }

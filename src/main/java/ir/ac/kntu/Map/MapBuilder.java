@@ -67,27 +67,4 @@ public class MapBuilder {
         }
     }
 
-//    private static void createBalloon(GridPane root,MapData map){
-//        int[][] mapData = map.getMAP();
-//        for (int i=0;i< mapData.length;i++){
-//            for (int j=0;j< mapData[i].length;j++){
-//                switch (mapData[i][j]){
-//                    case 3:
-//                        if ((mapData[i-1][j] == MapData.DESTRUCTIBLE_ROCK && mapData[i+1][j] == MapData.ORDINARY_BALLOON_AREA)
-//                                || (mapData[i][j-1] == MapData.DESTRUCTIBLE_ROCK && mapData[i][j+1] == MapData.ORDINARY_BALLOON_AREA)){
-//                            root.add(new Balloon(i,j, BalloonType.ORDINARY).getImage(),j,i);
-//                        }
-//                        break;
-//                    case 4:
-//                        if ((mapData[i-1][j] == MapData.DESTRUCTIBLE_ROCK && mapData[i+1][j] == MapData.DRAGON_BALLOON_AREA)
-//                                || (mapData[i][j-1] == MapData.DESTRUCTIBLE_ROCK && mapData[i][j+1] == MapData.DRAGON_BALLOON_AREA)){
-//                            root.add(new Balloon(i,j,BalloonType.DRAGON).getImage(),j,i);
-//                        }
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-//        }
-//    }
 }

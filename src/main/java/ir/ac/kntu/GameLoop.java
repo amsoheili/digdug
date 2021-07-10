@@ -44,6 +44,7 @@ public class GameLoop {
     private int numOfPlayers;
     private int numOfEnemies;
     private RandomObjects randomObjects;
+    private boolean end;
 
     public GameLoop(GridPane root,Scene scene,Stage stage,ArrayList<PlayerInfo> players){
         this.root = root;
@@ -51,9 +52,9 @@ public class GameLoop {
         this.stage = stage;
         this.players = players;
         gameObjects = new ArrayList<>();
-        keyLogger = new KeyLogger(scene,gameObjects);
         initBackground();
         initGameObjects();
+        keyLogger = new KeyLogger(scene,gameObjects);
         setTimerAnimation();
         setNumOfPlayersAndEnemies();
         randomObjects = new RandomObjects(gameObjects);
@@ -135,6 +136,16 @@ public class GameLoop {
                 checkCollide();
                 checkAndFall();
                 clean();
+                if (getNumOfPlayers() <= 0){
+                    System.out.println("all players died");
+                    endGame();
+                    return;
+                }
+                if (numOfEnemies <= 0){
+                    System.out.println("all enemies died");
+                    endGame();
+                    return;
+                }
                 moveBalloons();
                 addGameObjectsToRoot();
             }
@@ -166,16 +177,9 @@ public class GameLoop {
             if (!gameObjects.get(i).isAlive()){
                 if (gameObjects.get(i) instanceof Player){
                     numOfPlayers--;
-                    if (getNumOfPlayers() == 0){
-                        System.out.println("clean");
-                        endGame();
-                    }
                 }
                 if (gameObjects.get(i) instanceof Balloon){
                     numOfEnemies--;
-                    if (numOfEnemies == 0){
-                        endGame();
-                    }
                 }
                 gameObjects.remove(i);
             }
@@ -264,7 +268,6 @@ public class GameLoop {
 
     public void endGame(){
         animationTimer.stop();
-        root.getChildren().clear();
         timerThread.shutdown();
         keyLogger.removeAllListeners();
         randomObjects.stop();
@@ -274,13 +277,12 @@ public class GameLoop {
             //players.get(0).win();
         }
         PlayerDAO playerDAO = new BinaryPlayerDAO();
-        //playerDAO.saveAllPlayers(this.players);
+        playerDAO.saveAllPlayers(this.players);
         showRanks();
     }
 
     private void showRanks() {
         root.getChildren().clear();
-        System.out.println("showRanks");
         Collections.sort(players);
         ListView listView=new ListView();
         listView.setPrefWidth(500);
@@ -292,13 +294,11 @@ public class GameLoop {
             listView.getItems().add(i+". "+player.getName()+"             "+player.getLastScore());
         }
         root.add(listView,0,0);
-        System.out.println("showRanks");
         Button button=new Button("BACK");
         button.setOnAction(e->{
             Menu menu=new Menu(stage,scene,root);
         });
         root.add(button,1,0);
-        System.out.println("showRanks");
     }
 
 
