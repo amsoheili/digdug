@@ -119,11 +119,13 @@ public class Balloon extends GameObject{
             }
         }
         if (gameObject instanceof IndestructibleRock){
-            if (  ((IndestructibleRock)gameObject).getLastRowIndex() + 1 == getRowIndex()){
-                System.out.println("A");
-                setBalloonState(BalloonState.EXPLODING);
-                explode();
-            }
+//            if (  ((IndestructibleRock)gameObject).getLastRowIndex() + 1 == getRowIndex()){
+//                System.out.println("A");
+//                setBalloonState(BalloonState.EXPLODING);
+//                explode();
+//            }
+            setBalloonState(BalloonState.EXPLODING);
+            explode();
         }
 
         if (gameObject instanceof Bullet){

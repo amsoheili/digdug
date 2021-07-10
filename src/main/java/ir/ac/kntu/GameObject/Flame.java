@@ -3,7 +3,8 @@ package ir.ac.kntu.GameObject;
 import javafx.scene.image.ImageView;
 
 public class Flame extends GameObject{
-    ObjectDirection direction;
+
+    private ObjectDirection direction;
 
     public Flame(int rowIndex,int columnIndex,ObjectDirection direction){
         super(rowIndex,columnIndex,0,0);

@@ -83,7 +83,7 @@ public class Menu {
             if(result.size()==2) {
                 result.remove(result.size() - 1);
             }
-            System.out.println("ooo");
+            System.out.println("clicked");
             PlayerInfo playerInfo=(PlayerInfo) listView.getSelectionModel().getSelectedItem();
             if(!result.contains(playerInfo)&&playerInfo!=null){
                 result.add(playerInfo);

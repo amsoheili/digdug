@@ -3,6 +3,7 @@ package ir.ac.kntu;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class PlayerInfo implements Serializable,Comparable<PlayerInfo> {
     private String name;
@@ -34,6 +35,10 @@ public class PlayerInfo implements Serializable,Comparable<PlayerInfo> {
         return lastScore;
     }
 
+    public int getHighScore(){
+        return highScore;
+    }
+
     public String getName() {
         return name;
     }
@@ -43,6 +48,23 @@ public class PlayerInfo implements Serializable,Comparable<PlayerInfo> {
         return "Name: " + name + "  " +
                 "Number of Games : "+ numOfGames + "  " +
                 "HighScore : " + highScore;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
+        PlayerInfo that = (PlayerInfo) o;
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
 

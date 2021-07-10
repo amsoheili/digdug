@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -38,13 +39,13 @@ public class GameLoop {
     private AnimationTimer animationTimer;
     private List<GameObject> gameObjects;
     private KeyLogger keyLogger;
-    private long startTime;
     private Timer timer;
     private ScheduledExecutorService timerThread;
     private int numOfPlayers;
     private int numOfEnemies;
     private RandomObjects randomObjects;
     private boolean end;
+    private Player player;
 
     public GameLoop(GridPane root,Scene scene,Stage stage,ArrayList<PlayerInfo> players){
         this.root = root;
@@ -82,7 +83,8 @@ public class GameLoop {
         for (int i=0;i<mapData.length;i++){
             for (int j=0;j<mapData[i].length;j++){
                 if (mapData[i][j] == MapData.PLAYER){
-                    gameObjects.add(new Player(i,j,3,ObjectDirection.RIGHT,PlayerState.STANDING,1,1));
+                    this.player = new Player(i,j, players.get(0), 3,ObjectDirection.RIGHT,PlayerState.STANDING,1,1);
+                    gameObjects.add(player);
                 }
                 if (mapData[i][j] == MapData.DESTRUCTIBLE_ROCK){
                     gameObjects.add(new DestructibleRock(i,j));
@@ -115,19 +117,19 @@ public class GameLoop {
             private int count=0;
             @Override
             public void handle(long l) {
-//                if(count<5){
-//                    root.getChildren().clear();
-//                    count++;
-//                    TextField textField=new TextField((String.valueOf(count)));
-//                    textField.setId("textField");
-//                    root.add(textField,0,0);
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    return;
-//                }
+                if(count<5){
+                    root.getChildren().clear();
+                    count++;
+                    TextField textField=new TextField((String.valueOf(count)));
+                    textField.setId("textField");
+                    root.add(textField,0,0);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    return;
+                }
                 try{
                     Thread.sleep(200);
                 }catch (InterruptedException e){
@@ -271,10 +273,13 @@ public class GameLoop {
         timerThread.shutdown();
         keyLogger.removeAllListeners();
         randomObjects.stop();
-        List<Player> players = getPlayers();
-        root.getChildren().clear();
-        if (players.size() != 0){
-            //players.get(0).win();
+        //List<Player> players = getPlayers();
+        if (this.player.isAlive()){
+            player.win();
+            //this.players.get(0).win(player.getCurrentScore());
+        }else {
+            player.lose();
+            //this.players.get(0).lose(player.getCurrentScore());
         }
         PlayerDAO playerDAO = new BinaryPlayerDAO();
         playerDAO.saveAllPlayers(this.players);
@@ -291,7 +296,7 @@ public class GameLoop {
         int i=0;
         for (PlayerInfo player : players){
             i++;
-            listView.getItems().add(i+". "+player.getName()+"             "+player.getLastScore());
+            listView.getItems().add(i+". "+player.getName()+"             "+player.getHighScore());
         }
         root.add(listView,0,0);
         Button button=new Button("BACK");
@@ -300,8 +305,6 @@ public class GameLoop {
         });
         root.add(button,1,0);
     }
-
-
 
     public List<Player> getPlayers(){
         List<Player> players = new ArrayList<>();

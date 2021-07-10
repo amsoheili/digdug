@@ -11,7 +11,7 @@ import java.util.List;
 public class Player extends GameObject implements KeyListener {
     private int hp;
     private int currentScore;
-    private int maxScore;
+    private int highScore;
     private ObjectDirection direction;
     private PlayerState playerState;
     private KeyEvent keyEvent;
@@ -23,12 +23,14 @@ public class Player extends GameObject implements KeyListener {
     public Player(){
     }
 
-    public Player(int x,int y,int hp,ObjectDirection direction,PlayerState playerState,int xSpeed,int ySpeed){
+    public Player(int x,int y,PlayerInfo playerInfo,int hp,ObjectDirection direction,PlayerState playerState,int xSpeed,int ySpeed){
         super(x,y,xSpeed,ySpeed);
         this.hp = hp;
+        this.highScore = 0;
         this.currentScore = 0;
         this.direction = direction;
         this.playerState = playerState;
+        this.playerInfo = playerInfo;
         this.bulletType = 1;
         setImage();
     }
@@ -217,6 +219,7 @@ public class Player extends GameObject implements KeyListener {
             }
         }
     }
+
     public void moveLeft(){
         if (getColumnIndex() >= getXSpeed()) {
             if (getXSpeed() == 2){
@@ -239,6 +242,7 @@ public class Player extends GameObject implements KeyListener {
             }
         }
     }
+
     public void setBullet(List<GameObject> gameObjects){
         if (direction == ObjectDirection.RIGHT && bulletType == 1){
             setBulletHelper(gameObjects,0,3,MathOperation.PLUS,ObjectDirection.RIGHT);
@@ -262,17 +266,22 @@ public class Player extends GameObject implements KeyListener {
     }
 
     public void setBulletHelper(List<GameObject> gameObjects,int x,int y,MathOperation operation,ObjectDirection direction){
+        Bullet bullet = new Bullet();
         if (x==0){
             if (operation == MathOperation.PLUS){
                 for (int i=1;i<=y;i++){
                     if (getColumnIndex()+i < MapData.GRID_SIZE_X){
-                        gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()+i, direction));
+                        bullet = new Bullet(getRowIndex(), getColumnIndex()+i, direction);
+                        gameObjects.add(bullet);
+                        checkHit(bullet);
                     }
                 }
             }else if (operation == MathOperation.MINUS){
                 for (int i=1;i<=y;i++){
                     if (getColumnIndex()-i >= 0){
-                        gameObjects.add(new Bullet(getRowIndex(), getColumnIndex()-i, direction));
+                        bullet = new Bullet(getRowIndex(), getColumnIndex()-i, direction);
+                        gameObjects.add(bullet);
+                        checkHit(bullet);
                     }
                 }
             }
@@ -280,17 +289,80 @@ public class Player extends GameObject implements KeyListener {
             if (operation == MathOperation.PLUS){
                 for (int i=1;i<=x;i++){
                     if (getRowIndex()+i < MapData.GRID_SIZE_X){
-                        gameObjects.add(new Bullet(getRowIndex()+i, getColumnIndex(), direction));
+                        bullet = new Bullet(getRowIndex()+i, getColumnIndex(), direction);
+                        gameObjects.add(bullet);
+                        checkHit(bullet);
                     }
                 }
             }else if (operation == MathOperation.MINUS){
                 for (int i=1;i<=x;i++){
                     if (getRowIndex()-i >= 0){
-                        gameObjects.add(new Bullet(getRowIndex()-i, getColumnIndex(), direction));
+                        bullet = new Bullet(getRowIndex()-i, getColumnIndex(), direction);
+                        gameObjects.add(bullet);
+                        checkHit(bullet);
                     }
                 }
             }
         }
+        //checkHit(bullet);
+    }
+
+    public void checkHit(Bullet bullet){
+        Runnable checkHit = new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(220);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                System.out.println("checkHit1");
+                if (bullet.isHitOrdinaryBalloon()){
+                    System.out.println("checkHit2");
+                    setCurrentScore(getCurrentScore() + 2);
+                }
+                try{
+                    Thread.sleep(220);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                if (bullet.isHitDragonBalloon()){
+                    System.out.println("checkHit3");
+                    setCurrentScore(getCurrentScore() + 4);
+                }
+            }
+        };
+        Thread thread = new Thread(checkHit);
+        thread.start();
+//        System.out.println("checkHit1");
+//        System.out.println(bullet.isHitOrdinaryBalloon());
+//        if (bullet.isHitOrdinaryBalloon()){
+//            System.out.println("checkHit2");
+//            setCurrentScore(getCurrentScore() + 2);
+//        }
+//        if (bullet.isHitDragonBalloon()){
+//            System.out.println("checkHit3");
+//            setCurrentScore(getCurrentScore() + 4);
+//        }
+    }
+
+    public void setCurrentScore(int currentScore){
+        if (currentScore > getHighScore()){
+            setHighScore(currentScore);
+        }
+        this.currentScore = currentScore;
+    }
+
+    public int getCurrentScore(){
+        return currentScore;
+    }
+
+    public void setHighScore(int highScore){
+        this.highScore = highScore;
+    }
+
+    public int getHighScore(){
+        return highScore;
     }
 
     @Override
@@ -333,10 +405,14 @@ public class Player extends GameObject implements KeyListener {
         }
     }
 
-    public void win(int score){
-        playerInfo.win(score);
+    public void win(){
+        playerInfo.win(getCurrentScore());
     }
 
+    public void lose(){
+        System.out.println(getCurrentScore());
+        playerInfo.lose(getCurrentScore());
+    }
 
     public void setBulletType(int bulletType){
         this.bulletType = bulletType;
