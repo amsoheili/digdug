@@ -29,6 +29,7 @@ public class Player extends GameObject implements KeyListener {
         this.currentScore = 0;
         this.direction = direction;
         this.playerState = playerState;
+        this.bulletType = 1;
         setImage();
     }
 
@@ -68,12 +69,6 @@ public class Player extends GameObject implements KeyListener {
             image = setImageHelper("Cropped_Images/Player_Down.png");
             setImage(image);
         }
-
-//        if (direction == ObjectDirection.RIGHT && playerState == PlayerState.FIRING){
-//            image = new ImageView("Cropped_Images/Player_Strike_Right.png");
-//            image.setFitWidth();
-//            setImage(image);
-//        }
 
     }
 
@@ -130,27 +125,19 @@ public class Player extends GameObject implements KeyListener {
         setPlayerState(PlayerState.MOVING);
         switch (keyEvent.getCode()) {
             case UP:
-                if (getRowIndex() > 1) {
-                    setRowIndex(getRowIndex() - 1);
-                }
+                moveUp();
                 this.direction = ObjectDirection.UP;
                 break;
             case DOWN:
-                if (getRowIndex() < MapData.GRID_SIZE_X) {
-                    setRowIndex(getRowIndex() + 1);
-                }
+                moveDown();
                 this.direction = ObjectDirection.DOWN;
                 break;
             case RIGHT:
-                if (getColumnIndex() < MapData.GRID_SIZE_X) {
-                    setColumnIndex(getColumnIndex() + 1);
-                }
+                moveRight();
                 this.direction = ObjectDirection.RIGHT;
                 break;
             case LEFT:
-                if (getColumnIndex() > 1) {
-                    setColumnIndex(getColumnIndex() - 1);
-                }
+                moveLeft();
                 this.direction = ObjectDirection.LEFT;
                 break;
             case ENTER:
@@ -162,8 +149,97 @@ public class Player extends GameObject implements KeyListener {
         gameObjects.add(this);
     }
 
+    public void moveUp(){
+        if (getRowIndex() >= getYSpeed()) {
+            if (getYSpeed() == 2){
+                Runnable up2 = new Runnable() {
+                    @Override
+                    public void run() {
+                        setRowIndex(getRowIndex() - 1);
+                        try{
+                            Thread.sleep(250);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
+                        setRowIndex(getRowIndex() - 1);
+                    }
+                };
+                Thread thread = new Thread(up2);
+                thread.start();
+            }else {
+                setRowIndex(getRowIndex() - getYSpeed());
+            }
+        }
+    }
+
+    public void moveDown(){
+        if (getRowIndex() < MapData.GRID_SIZE_X - getYSpeed()) {
+            if (getYSpeed() == 2){
+                Runnable down2 = new Runnable() {
+                    @Override
+                    public void run() {
+                        setRowIndex(getRowIndex() + 1);
+                        try{
+                            Thread.sleep(250);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
+                        setRowIndex(getRowIndex() + 1);
+                    }
+                };
+                Thread thread = new Thread(down2);
+                thread.start();
+            }else {
+                setRowIndex(getRowIndex() + getYSpeed());
+            }
+        }
+    }
+
+    public void moveRight(){
+        if (getColumnIndex() < MapData.GRID_SIZE_X - getXSpeed()) {
+            if (getXSpeed() == 2){
+                Runnable right2 = new Runnable() {
+                    @Override
+                    public void run() {
+                        setColumnIndex(getColumnIndex() + 1);
+                        try{
+                            Thread.sleep(250);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
+                        setColumnIndex(getColumnIndex() + 1);
+                    }
+                };
+                Thread thread = new Thread(right2);
+                thread.start();
+            }else {
+                setColumnIndex(getColumnIndex() + getXSpeed());
+            }
+        }
+    }
+    public void moveLeft(){
+        if (getColumnIndex() >= getXSpeed()) {
+            if (getXSpeed() == 2){
+                Runnable left2 = new Runnable() {
+                    @Override
+                    public void run() {
+                        setColumnIndex(getColumnIndex() - 1);
+                        try{
+                            Thread.sleep(250);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
+                        setColumnIndex(getColumnIndex() - 1);
+                    }
+                };
+                Thread thread = new Thread(left2);
+                thread.start();
+            }else{
+                setColumnIndex(getColumnIndex() - getXSpeed());
+            }
+        }
+    }
     public void setBullet(List<GameObject> gameObjects){
-        this.bulletType = 2;
         if (direction == ObjectDirection.RIGHT && bulletType == 1){
             setBulletHelper(gameObjects,0,3,MathOperation.PLUS,ObjectDirection.RIGHT);
         }else if (direction == ObjectDirection.LEFT && bulletType == 1){
@@ -235,6 +311,18 @@ public class Player extends GameObject implements KeyListener {
         if (gameObject instanceof Flame){
             getsDamageOrDie();
         }
+        if (gameObject instanceof Sniper){
+            setBulletType(2);
+        }
+        if (gameObject instanceof Heart){
+            if (getHp()<3){
+                setHp(getHp()+1);
+            }
+        }
+        if (gameObject instanceof Mushroom){
+            setXSpeed(2);
+            setYSpeed(2);
+        }
     }
 
     public void getsDamageOrDie(){
@@ -243,6 +331,10 @@ public class Player extends GameObject implements KeyListener {
         }else{
             setHp(getHp()-1);
         }
+    }
+
+    public void setBulletType(int bulletType){
+        this.bulletType = bulletType;
     }
 
     public void setHp(int hp){

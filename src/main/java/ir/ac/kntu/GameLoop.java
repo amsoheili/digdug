@@ -40,6 +40,7 @@ public class GameLoop {
     private ScheduledExecutorService timerThread;
     private int numOfPlayers;
     private int numOfEnemies;
+    private RandomObjects randomObjects;
 
     public GameLoop(GridPane root,Scene scene,Stage stage,ArrayList<PlayerInfo> result){
         this.root = root;
@@ -52,6 +53,7 @@ public class GameLoop {
         initGameObjects();
         setTimerAnimation();
         setNumOfPlayersAndEnemies();
+        randomObjects = new RandomObjects(gameObjects);
     }
 
     public void setNumOfPlayersAndEnemies(){
@@ -76,7 +78,7 @@ public class GameLoop {
         for (int i=0;i<mapData.length;i++){
             for (int j=0;j<mapData[i].length;j++){
                 if (mapData[i][j] == MapData.PLAYER){
-                    gameObjects.add(new Player(i,j,3,ObjectDirection.RIGHT,PlayerState.STANDING,1,1));
+                    gameObjects.add(new Player(i,j,3,ObjectDirection.RIGHT,PlayerState.STANDING,2,2));
                 }
                 if (mapData[i][j] == MapData.DESTRUCTIBLE_ROCK){
                     gameObjects.add(new DestructibleRock(i,j));
@@ -203,16 +205,7 @@ public class GameLoop {
 
     public void addGameObjectsToRoot(){
         root.getChildren().clear();
-        Label stop = new Label("STOP GAME");
-        stop.setOnMouseClicked(e->{
-            animationTimer.stop();
-        });
-        root.add(stop,MapData.GRID_SIZE_X+1,2);
-        Label resume = new Label("Resume GAME");
-        resume.setOnMouseClicked(e->{
-            animationTimer.start();
-        });
-        root.add(resume,MapData.GRID_SIZE_X+1,3);
+        setStopAndResume();
         Label label = new Label(getTimer().toString());
         label.setMinWidth(150);
         label.setStyle("-fx-font-size:12;");
@@ -235,10 +228,24 @@ public class GameLoop {
         }
     }
 
+    public void setStopAndResume(){
+        Label stop = new Label("STOP GAME");
+        stop.setOnMouseClicked(e->{
+            animationTimer.stop();
+        });
+        root.add(stop,MapData.GRID_SIZE_X+1,2);
+        Label resume = new Label("Resume GAME");
+        resume.setOnMouseClicked(e->{
+            animationTimer.start();
+        });
+        root.add(resume,MapData.GRID_SIZE_X+1,3);
+    }
+
     public void startGame(){
         animationTimer.start();
         startTime=new Date().getTime();
         setTimer();
+        randomObjects.start();
     }
 
     public void endGame(){
