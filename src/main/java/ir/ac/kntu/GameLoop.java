@@ -11,6 +11,7 @@ import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -202,6 +203,16 @@ public class GameLoop {
 
     public void addGameObjectsToRoot(){
         root.getChildren().clear();
+        Label stop = new Label("STOP GAME");
+        stop.setOnMouseClicked(e->{
+            animationTimer.stop();
+        });
+        root.add(stop,MapData.GRID_SIZE_X+1,2);
+        Label resume = new Label("Resume GAME");
+        resume.setOnMouseClicked(e->{
+            animationTimer.start();
+        });
+        root.add(resume,MapData.GRID_SIZE_X+1,3);
         Label label = new Label(getTimer().toString());
         label.setMinWidth(150);
         label.setStyle("-fx-font-size:12;");
