@@ -250,16 +250,16 @@ public class Balloon extends GameObject{
     }
 
     public void fire(List<GameObject> gameObjects){
-        if (getDirection() == ObjectDirection.RIGHT){
+        if (getDirection() == ObjectDirection.RIGHT && balloonState != BalloonState.EXPLODING){
             gameObjects.add(new Flame(getRowIndex(),getColumnIndex()+1,ObjectDirection.RIGHT));
         }
-        if (getDirection() == ObjectDirection.LEFT){
+        if (getDirection() == ObjectDirection.LEFT && balloonState != BalloonState.EXPLODING){
             gameObjects.add(new Flame(getRowIndex(),getColumnIndex()-1,ObjectDirection.LEFT));
         }
-        if (getDirection() == ObjectDirection.UP){
+        if (getDirection() == ObjectDirection.UP && balloonState != BalloonState.EXPLODING){
             gameObjects.add(new Flame(getRowIndex()-1,getColumnIndex(),ObjectDirection.UP));
         }
-        if (getDirection() == ObjectDirection.DOWN){
+        if (getDirection() == ObjectDirection.DOWN && balloonState != BalloonState.EXPLODING){
             gameObjects.add(new Flame(getRowIndex()+1,getColumnIndex(),ObjectDirection.DOWN));
         }
     }
