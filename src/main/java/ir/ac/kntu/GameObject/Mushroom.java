@@ -9,4 +9,10 @@ public class Mushroom extends GameObject{
         setImage(setImageHelper("assets/mushroom.png"));
     }
 
+    @Override
+    public void collide(GameObject gameObject){
+        if (gameObject instanceof Player){
+            setAlive(false);
+        }
+    }
 }

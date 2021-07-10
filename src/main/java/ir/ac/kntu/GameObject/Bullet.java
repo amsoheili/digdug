@@ -36,43 +36,20 @@ public class Bullet extends GameObject{
             image = setImageHelper("Cropped_Images/Bullet_Right.png");
             setImage(image);
         }
-//        if (direction == ObjectDirection.RIGHT && bulletType == 2){
-//            image = new ImageView("Cropped_Images/Bullet_Right.png");
-//            image.setFitWidth(5*MapData.GRID_SCALE);
-//            setImage(image);
-//        }
         if (direction == ObjectDirection.LEFT && bulletType == 1){
             image = setImageHelper("Cropped_Images/Bullet_Right.png");
             image.setRotate(180);
             setImage(image);
         }
-//        if (direction == ObjectDirection.LEFT && bulletType == 2){
-//            image = new ImageView("Cropped_Images/Bullet_Right.png");
-//            image.setFitHeight(5*MapData.GRID_SCALE);
-//            image.setRotate(180);
-//            setImage(image);
-//        }
         if (direction == ObjectDirection.UP && bulletType == 1){
             image = setImageHelper("Cropped_Images/Bullet_Right.png");
             image.setRotate(-90);
             setImage(image);
         }
-//        if (direction == ObjectDirection.UP && bulletType == 2){
-//            image = new ImageView("Cropped_Images/Bullet_Right.png");
-//            image.setFitHeight(5*MapData.GRID_SCALE);
-//            image.setRotate(-90);
-//            setImage(image);
-//        }
         if (direction == ObjectDirection.DOWN && bulletType == 1){
             image = setImageHelper("Cropped_Images/Bullet_Right.png");
             image.setRotate(90);
             setImage(image);
         }
-//        if (direction == ObjectDirection.DOWN && bulletType == 2){
-//            image = new ImageView("Cropped_Images/Bullet_Right.png");
-//            image.setFitHeight(5*MapData.GRID_SCALE);
-//            image.setRotate(90);
-//            setImage(image);
-//        }
     }
 }

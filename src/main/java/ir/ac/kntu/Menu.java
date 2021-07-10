@@ -71,8 +71,6 @@ public class Menu {
     }
 
     public void setPlayer(){
-        //Background background = new Background(new BackgroundFill(Color.rgb(48,100,144),CornerRadii.EMPTY,Insets.EMPTY));
-        //root.setBackground(background);
         root.getChildren().clear();
         ArrayList<PlayerInfo> players = playerDAO.getAllPlayers();
 //        players.add(new PlayerInfo("player1"));

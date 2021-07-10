@@ -5,4 +5,11 @@ public class Heart extends GameObject{
         super(rowIndex,columnIndex,0,0);
         setImage(setImageHelper("assets/heart.png"));
     }
+
+    @Override
+    public void collide(GameObject gameObject){
+        if (gameObject instanceof Player){
+            setAlive(false);
+        }
+    }
 }

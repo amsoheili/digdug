@@ -29,6 +29,10 @@ public class RandomObjects extends TimerTask {
         timer.schedule(this,15000,15000);
     }
 
+    public void stop(){
+        timer.cancel();
+    }
+
     public void clean(){
         for (int i=0;i<gameObjects.size();i++){
             if (gameObjects.get(i) instanceof Heart ||

@@ -8,6 +8,7 @@ public class PlayerInfo implements Serializable,Comparable<PlayerInfo> {
     private String name;
     private int numOfGames;
     private int highScore;
+    private int lastScore;
 
     public PlayerInfo(String name){
         this.name = name;
@@ -27,6 +28,14 @@ public class PlayerInfo implements Serializable,Comparable<PlayerInfo> {
             highScore = score;
         }
         numOfGames++;
+    }
+
+    public int getLastScore(){
+        return lastScore;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

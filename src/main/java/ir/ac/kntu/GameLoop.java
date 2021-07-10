@@ -6,6 +6,8 @@ import ir.ac.kntu.KeyBoard.KeyListener;
 import ir.ac.kntu.KeyBoard.KeyLogger;
 import ir.ac.kntu.Map.MapBuilder;
 import ir.ac.kntu.Map.MapData;
+import ir.ac.kntu.PlayerDAO.BinaryPlayerDAO;
+import ir.ac.kntu.PlayerDAO.PlayerDAO;
 import javafx.animation.AnimationTimer;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
@@ -13,6 +15,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -42,11 +45,11 @@ public class GameLoop {
     private int numOfEnemies;
     private RandomObjects randomObjects;
 
-    public GameLoop(GridPane root,Scene scene,Stage stage,ArrayList<PlayerInfo> result){
+    public GameLoop(GridPane root,Scene scene,Stage stage,ArrayList<PlayerInfo> players){
         this.root = root;
         this.scene = scene;
         this.stage = stage;
-        players = result;
+        this.players = players;
         gameObjects = new ArrayList<>();
         keyLogger = new KeyLogger(scene,gameObjects);
         initBackground();
@@ -78,7 +81,7 @@ public class GameLoop {
         for (int i=0;i<mapData.length;i++){
             for (int j=0;j<mapData[i].length;j++){
                 if (mapData[i][j] == MapData.PLAYER){
-                    gameObjects.add(new Player(i,j,3,ObjectDirection.RIGHT,PlayerState.STANDING,2,2));
+                    gameObjects.add(new Player(i,j,3,ObjectDirection.RIGHT,PlayerState.STANDING,1,1));
                 }
                 if (mapData[i][j] == MapData.DESTRUCTIBLE_ROCK){
                     gameObjects.add(new DestructibleRock(i,j));
@@ -164,6 +167,7 @@ public class GameLoop {
                 if (gameObjects.get(i) instanceof Player){
                     numOfPlayers--;
                     if (getNumOfPlayers() == 0){
+                        System.out.println("clean");
                         endGame();
                     }
                 }
@@ -219,12 +223,23 @@ public class GameLoop {
                 continue;
             }
             if (gameObjects.get(i) instanceof Player){
-                for (int j=1;j<=((Player)gameObjects.get(i)).getHp();j++){
+                Player player = (Player)gameObjects.get(i);
+                for (int j=1;j<=player.getHp();j++){
+                    removeRock(0,MapData.GRID_SIZE_X-j);
                     Flower flower = new Flower(0,MapData.GRID_SIZE_X-j);
                     root.add(flower.getImage(), flower.getColumnIndex(),flower.getRowIndex());
                 }
             }
             root.add(gameObjects.get(i).getImage(),gameObjects.get(i).getColumnIndex(),gameObjects.get(i).getRowIndex());
+        }
+    }
+
+    public void removeRock(int rowIndex,int columnIndex){
+        for (int i=0;i< gameObjects.size();i++){
+            if (gameObjects.get(i).getRowIndex() == rowIndex &&
+                gameObjects.get(i).getColumnIndex() == columnIndex){
+                gameObjects.remove(i);
+            }
         }
     }
 
@@ -243,47 +258,69 @@ public class GameLoop {
 
     public void startGame(){
         animationTimer.start();
-        startTime=new Date().getTime();
         setTimer();
         randomObjects.start();
     }
 
     public void endGame(){
         animationTimer.stop();
+        root.getChildren().clear();
         timerThread.shutdown();
+        keyLogger.removeAllListeners();
+        randomObjects.stop();
+        List<Player> players = getPlayers();
+        root.getChildren().clear();
+        if (players.size() != 0){
+            //players.get(0).win();
+        }
+        PlayerDAO playerDAO = new BinaryPlayerDAO();
+        //playerDAO.saveAllPlayers(this.players);
+        showRanks();
+    }
+
+    private void showRanks() {
+        root.getChildren().clear();
+        System.out.println("showRanks");
+        Collections.sort(players);
+        ListView listView=new ListView();
+        listView.setPrefWidth(500);
+        listView.setPrefHeight(600);
+        listView.getStyleClass().add("listView");
+        int i=0;
+        for (PlayerInfo player : players){
+            i++;
+            listView.getItems().add(i+". "+player.getName()+"             "+player.getLastScore());
+        }
+        root.add(listView,0,0);
+        System.out.println("showRanks");
+        Button button=new Button("BACK");
+        button.setOnAction(e->{
+            Menu menu=new Menu(stage,scene,root);
+        });
+        root.add(button,1,0);
+        System.out.println("showRanks");
+    }
+
+
+
+    public List<Player> getPlayers(){
+        List<Player> players = new ArrayList<>();
+        for (int i=0;i< gameObjects.size();i++){
+            if (gameObjects.get(i) instanceof Player){
+                players.add((Player) gameObjects.get(i));
+            }
+        }
+        return players;
     }
 
     public void setTimer(){
         timerThread = Executors.newScheduledThreadPool(1);
         this.timer = new Timer();
         timerThread.scheduleAtFixedRate(timer,1,1, TimeUnit.SECONDS);
-//        timerThread.shutdown();
     }
 
     public Timer getTimer(){
         return timer;
-    }
-
-    private void startTimer() {
-        Thread timer;
-        timer = new Thread(() -> {
-            try {
-                Thread.sleep(1000 * 60 * 3);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-//            if (!this.isDone()) {
-//                Platform.runLater(() -> {
-//                    getPane().addRow(getPane().getRowCount() - 1, new Text("TimeUp"));
-//                });
-//                handleEndOfGame();
-//            }
-        });
-        timer.start();
-    }
-
-    public void setNumOfPlayers(int numOfPlayers){
-        this.numOfPlayers = numOfPlayers;
     }
 
     public int getNumOfPlayers(){

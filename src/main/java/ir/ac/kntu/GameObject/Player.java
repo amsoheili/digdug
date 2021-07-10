@@ -333,6 +333,11 @@ public class Player extends GameObject implements KeyListener {
         }
     }
 
+    public void win(int score){
+        playerInfo.win(score);
+    }
+
+
     public void setBulletType(int bulletType){
         this.bulletType = bulletType;
     }
